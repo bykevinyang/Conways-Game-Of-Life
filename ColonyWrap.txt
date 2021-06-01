@@ -1,0 +1,63 @@
+// struct Colony: CustomStringConvertible{
+struct ColonyWrap: CustomStringConvertible{
+  let colonySize: Int
+  var numberLivingCells: Int
+  var gameArray: Array2DS
+
+  init(colonySize: Int){
+    self.colonySize = colonySize
+    gameArray = Array2DS(numberRows: colonySize, numberCols: colonySize)
+    numberLivingCells = 0
+  }
+
+  var description: String{
+    return(gameArray.description)
+  }
+  
+  mutating func setCellAlive(_ xCoor: Int, _ yCoor: Int){
+    gameArray[xCoor, yCoor] = 1
+  }
+  
+  mutating func setCellDead(_ xCoor: Int, _ yCoor: Int){
+    gameArray[xCoor, yCoor] = 0
+  }
+
+  mutating func resetColony(){
+    gameArray = Array2DS(numberRows: colonySize, numberCols: colonySize)
+  }
+
+  func isCellAlive( xCoor: Int, yCoor: Int) -> Bool{
+    let value = gameArray[xCoor, yCoor]
+    if value == 1{return true}
+    else{return false}
+  }
+
+  func areaScan(_ r: Int, _ c:Int, wrapping: Bool) -> Int{
+    if wrapping == true:
+      if r < colonySize && r > 0:
+        // do normal stuff here for rows
+      else:
+        // do wrapping here for rows
+    else:
+      let cells = gameArray[r-1,c-1] + gameArray[r-1,c] + gameArray[r-1,c+1] + gameArray[r,c-1] + gameArray[r,c+1] + gameArray[r+1,c-1] + gameArray[r+1,c] + gameArray[r+1,c+1]
+      return cells
+  }
+
+  mutating func evolve(){
+    var copyArray = gameArray
+    for r in 0..<gameArray.numberRows{
+      for c in 0..<gameArray.numberCols{
+        let cellsNextTo = areaScan(r,c)
+
+        // print(cellsNextTo, " (\(r), \(c))")
+        if cellsNextTo < 2 || cellsNextTo > 3{
+          copyArray[r,c] = 0
+        }else if cellsNextTo == 3{
+          copyArray[r,c] = 1
+        }
+      }
+    }
+    gameArray = copyArray
+    // add stuff later
+  }
+} 
