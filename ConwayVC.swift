@@ -1,3 +1,5 @@
+import Foundation
+
 struct ConwayVC{
   var game: Colony
   var mode: String
@@ -15,11 +17,12 @@ struct ConwayVC{
   }
 
   mutating func run(){
+    var global_gen: Int = 0
     var mode = "inputCoor"
 
     print("Colony Size...", terminator: "")
-    var console = readLine()!
-    var sep = console.components(separatedBy:" ")
+    let console = readLine()!
+    let sep = console.components(separatedBy:" ")
 
     if sep.count != 1{
       print("Error: Inputted board size wrong")
@@ -29,44 +32,52 @@ struct ConwayVC{
 
     while(mode == "inputCoor"){
       print("Coor: ", terminator: "")
-      var console = readLine()!
-      var sep = console.components(separatedBy:" ")
+      let console = readLine()!
+      let sep = console.components(separatedBy:" ")
       if sep[0] == ""{
         mode = "evolution"
         print("Running Evolution")
         print(commands)
+        print("\nCommand...", terminator: "")
         break
       }else{
         let x = Int(sep[0])!
         let y = Int(sep[1])!
         game.setCellAlive(x, y)
-        print("x = \(x)")
-        print("y = \(y)")
-        // write rest from here
         }
     }
     while(mode == "evolution"){
-      var console = readLine()!
-      if console.count != 1{
-        print("Error: Given more than one letter command, please try again")
+      let console = readLine()!
+      if console.count == 0{
+        print("Error: Given no input, please try again")
       }else{
-        let char: Character = console.first!
-        let ascii = char.asciiValue!
-        if ascii >= 48 && ascii <= 57{
-          // evolve n generations
-          
-          print("is number")
-        }else if ascii == 113 || ascii == 81{
-          print("Quitting runtime")
-          break
+        let check_int = Int(console)
+        if check_int != nil{
+          let generations = Int(console)!
+          for _ in 0..<generations{
+            print("Generation: \(global_gen)")
+            print(game)
+            print("\n")
+            game.evolve()
+            global_gen += 1
+          }
+          print("Command...", terminator: "")
         }else{
-          print("fix later")
-          // evolve one generation
+          if console == "Q" || console == "q"{
+            print("Quitting runtime")
+            break
+          }else{
+            print("Generation: \(global_gen)")
+            print(game)
+            print("\n")
+            game.evolve()
+            global_gen += 1
+            print("\nCommand...", terminator: "")
         }
-
       }
 
     }
 
   }
+}
 }

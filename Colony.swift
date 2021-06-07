@@ -1,13 +1,22 @@
 // struct Colony: CustomStringConvertible{
 struct Colony: CustomStringConvertible{
   let colonySize: Int
-  var numberLivingCells: Int
+  var numberLivingCells: Int{
+    var sum = 0
+
+    for r in 0..<colonySize{
+      for c in 0..<colonySize{
+        sum += gameArray[r,c]
+      }
+    }
+    return sum
+  }
+
   var gameArray: Array2DS
 
   init(colonySize: Int){
     self.colonySize = colonySize
     gameArray = Array2DS(numberRows: colonySize, numberCols: colonySize)
-    numberLivingCells = 0
   }
 
   var description: String{
@@ -16,17 +25,14 @@ struct Colony: CustomStringConvertible{
   
   mutating func setCellAlive(_ xCoor: Int, _ yCoor: Int){
     gameArray[xCoor, yCoor] = 1
-    numberLivingCells += 1
   }
   
   mutating func setCellDead(_ xCoor: Int, _ yCoor: Int){
     gameArray[xCoor, yCoor] = 0
-    numberLivingCells += -1
   }
 
   mutating func resetColony(){
     gameArray = Array2DS(numberRows: colonySize, numberCols: colonySize)
-    numberLivingCells = 0
   }
 
   func isCellAlive( xCoor: Int, yCoor: Int) -> Bool{
@@ -45,11 +51,9 @@ struct Colony: CustomStringConvertible{
         if gameArray[r,c] == 1{
           if cellsNextTo < 2 || cellsNextTo > 3{
             copyArray[r,c] = 0
-            numberLivingCells += -1
         }
         }else if cellsNextTo == 3{
           copyArray[r,c] = 1
-          numberLivingCells += 1
         }
       }
     }
