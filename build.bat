@@ -5,4 +5,5 @@ set SWIFTFLAGS=-sdk %SDKROOT% -I %SDKROOT%/usr/lib/swift -L %SDKROOT%/usr/lib/sw
 
 swiftc -o main.exe ConwayVC.swift Colony.swift main.swift Array2DS.swift %SWIFTFLAGS%
 
+rem Run executable
 main.exe
